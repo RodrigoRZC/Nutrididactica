@@ -1,0 +1,578 @@
+<-- YA NO SE UTILIZA>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Carrito - Nutrididactica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            min-height: 100vh;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #27ae60;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .carrito-vacio {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+            background: #f8fdf8;
+            border-radius: 15px;
+            border: 2px dashed #e8f5e8;
+        }
+
+        .carrito-vacio .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .carrito-items {
+            margin-bottom: 30px;
+        }
+
+        .carrito-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid #f0f7f0;
+            gap: 20px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .carrito-item-imagen {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            background: #f8fdf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            flex-shrink: 0;
+        }
+
+        .carrito-item-info {
+            flex: 1;
+        }
+
+        .carrito-item-nombre {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        .carrito-item-precio {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .carrito-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cantidad-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8fdf8;
+            padding: 8px 15px;
+            border-radius: 8px;
+        }
+
+        .btn-cantidad {
+            background: #27ae60;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .btn-cantidad.restar {
+            background: #e67e22;
+        }
+
+        .cantidad-number {
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .carrito-item-subtotal {
+            font-weight: 700;
+            color: #27ae60;
+            min-width: 80px;
+            text-align: right;
+        }
+
+        .btn-eliminar {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .resumen-pedido {
+            background: #f8fdf8;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e8f5e8;
+        }
+
+        .resumen-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .resumen-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e8f5e8;
+        }
+
+        .resumen-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-top: 15px;
+            border-top: 2px solid #27ae60;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .total-monto {
+            color: #27ae60;
+            font-size: 1.4em;
+        }
+
+        .acciones-carrito {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-pagar {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .btn-seguir-comprando {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .mensaje {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 1000;
+        }
+
+        .mensaje.success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .mensaje.error {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .carrito-item {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .carrito-item-controls {
+                justify-content: center;
+            }
+
+            .acciones-carrito {
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛒 Mi Carrito de Compras</h1>
+            <p>Nutrididactica - Productos 100% naturales</p>
+        </div>
+        
+        <div class="content">
+            <h2 class="page-title">Tus Productos Agregados</h2>
+            
+            <div id="carritoContainer">
+                <div class="loading">
+                    <h3>Cargando tu carrito...</h3>
+                    <p>Obteniendo los productos que agregaste</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>🌱 Nutrididactica - Comprometidos con tu salud y bienestar</p>
+        </div>
+    </div>
+
+    <script>
+        // Variable para almacenar el carrito
+        let carrito = [];
+
+        // Cargar el carrito cuando la página se carga
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🛒 Página del carrito cargada');
+            cargarCarrito();
+        });
+
+        // Función para cargar el carrito desde el servidor
+        async function cargarCarrito() {
+            try {
+                console.log('📡 Solicitando carrito al servidor...');
+                const response = await fetch('/api/carrito');
+                const data = await response.json();
+
+                if (data.success) {
+                    carrito = data.carrito;
+                    console.log('✅ Carrito cargado:', carrito);
+                    mostrarCarrito();
+                } else {
+                    console.error('❌ Error al cargar carrito:', data.message);
+                    mostrarError('Error al cargar el carrito');
+                }
+            } catch (error) {
+                console.error('❌ Error de conexión:', error);
+                mostrarError('Error de conexión al cargar el carrito');
+            }
+        }
+
+        // Función para mostrar el carrito en la página
+        function mostrarCarrito() {
+            const container = document.getElementById('carritoContainer');
+            
+            if (carrito.length === 0) {
+                container.innerHTML = `
+                    <div class="carrito-vacio">
+                        <div class="icon">🛒</div>
+                        <h3>Tu carrito está vacío</h3>
+                        <p>No has agregado ningún producto todavía</p>
+                        <a href="/" class="btn">🛍️ Ir a Comprar</a>
+                    </div>
+                `;
+            } else {
+                let html = '<div class="carrito-items">';
+                let subtotal = 0;
+                let totalItems = 0;
+                
+                // Mostrar cada producto del carrito
+                carrito.forEach(item => {
+                    const itemSubtotal = item.precio * item.cantidad;
+                    subtotal += itemSubtotal;
+                    totalItems += item.cantidad;
+                    
+                    html += `
+                        <div class="carrito-item">
+                            <div class="carrito-item-imagen">
+                                ${getIconoProducto(item.nombre, item.descripcion)}
+                            </div>
+                            <div class="carrito-item-info">
+                                <div class="carrito-item-nombre">${item.nombre}</div>
+                                <div class="carrito-item-precio">$${item.precio.toFixed(2)} c/u</div>
+                            </div>
+                            <div class="carrito-item-controls">
+                                <div class="cantidad-control">
+                                    <button class="btn-cantidad restar" onclick="cambiarCantidad('${item.nombre}', ${item.cantidad - 1})">-</button>
+                                    <span class="cantidad-number">${item.cantidad}</span>
+                                    <button class="btn-cantidad" onclick="cambiarCantidad('${item.nombre}', ${item.cantidad + 1})">+</button>
+                                </div>
+                                <div class="carrito-item-subtotal">
+                                    $${itemSubtotal.toFixed(2)}
+                                </div>
+                                <button class="btn-eliminar" onclick="eliminarDelCarrito('${item.nombre}')">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                    </div>
+                    
+                    <div class="resumen-pedido">
+                        <h3 class="resumen-title">📋 Resumen del Pedido</h3>
+                        <div class="resumen-item">
+                            <span>Productos:</span>
+                            <span>${totalItems}</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span>Subtotal:</span>
+                            <span>$${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div class="resumen-item">
+                            <span>Envío:</span>
+                            <span>Gratis</span>
+                        </div>
+                        <div class="resumen-total">
+                            <span>Total:</span>
+                            <span class="total-monto">$${subtotal.toFixed(2)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="acciones-carrito">
+                        <a href="/" class="btn-seguir-comprando">🛍️ Seguir Comprando</a>
+                        <button class="btn-pagar" onclick="procesarPago()">💳 Proceder al Pago</button>
+                    </div>
+                `;
+                
+                container.innerHTML = html;
+            }
+        }
+
+        // Función para cambiar la cantidad de un producto
+        async function cambiarCantidad(nombre, nuevaCantidad) {
+            try {
+                const response = await fetch('/api/carrito/actualizar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre, cantidad: nuevaCantidad })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    carrito = data.carrito;
+                    mostrarCarrito();
+                    mostrarMensaje('✅ Cantidad actualizada', 'success');
+                }
+            } catch (error) {
+                console.error('Error actualizando cantidad:', error);
+                mostrarMensaje('❌ Error al actualizar', 'error');
+            }
+        }
+
+        // Función para eliminar un producto del carrito
+        async function eliminarDelCarrito(nombre) {
+            try {
+                const response = await fetch('/api/carrito/eliminar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nombre })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    carrito = data.carrito;
+                    mostrarCarrito();
+                    mostrarMensaje('🗑️ Producto eliminado', 'success');
+                }
+            } catch (error) {
+                console.error('Error eliminando producto:', error);
+                mostrarMensaje('❌ Error al eliminar', 'error');
+            }
+        }
+
+        // Función para procesar el pago
+        function procesarPago() {
+            if (carrito.length === 0) {
+                mostrarMensaje('🛒 Tu carrito está vacío', 'error');
+                return;
+            }
+
+            mostrarMensaje('💳 Procesando tu pago...', 'success');
+            
+            // Simular proceso de pago
+            setTimeout(() => {
+                mostrarMensaje('✅ ¡Pago exitoso! Gracias por tu compra', 'success');
+                
+                // Limpiar carrito después del pago
+                fetch('/api/carrito/limpiar', { method: 'POST' })
+                    .then(() => {
+                        setTimeout(() => {
+                            window.location.href = '/';
+                        }, 2000);
+                    });
+            }, 2000);
+        }
+
+        // Función para mostrar mensajes
+        function mostrarMensaje(mensaje, tipo) {
+            // Remover mensaje anterior si existe
+            const mensajeAnterior = document.querySelector('.mensaje');
+            if (mensajeAnterior) {
+                mensajeAnterior.remove();
+            }
+
+            const mensajeDiv = document.createElement('div');
+            mensajeDiv.className = `mensaje ${tipo}`;
+            mensajeDiv.textContent = mensaje;
+            document.body.appendChild(mensajeDiv);
+
+            setTimeout(() => {
+                if (document.body.contains(mensajeDiv)) {
+                    document.body.removeChild(mensajeDiv);
+                }
+            }, 3000);
+        }
+
+        // Función para mostrar error
+        function mostrarError(mensaje) {
+            const container = document.getElementById('carritoContainer');
+            container.innerHTML = `
+                <div class="carrito-vacio">
+                    <div class="icon">⚠️</div>
+                    <h3>Error</h3>
+                    <p>${mensaje}</p>
+                    <button class="btn" onclick="cargarCarrito()">🔄 Reintentar</button>
+                </div>
+            `;
+        }
+
+        // Función para obtener icono del producto
+        function getIconoProducto(nombre, descripcion) {
+            const texto = (nombre + ' ' + (descripcion || '')).toLowerCase();
+            
+            if (texto.includes('proteína') || texto.includes('proteina')) return '🥩';
+            if (texto.includes('vitamina')) return '💊';
+            if (texto.includes('mineral')) return '💎';
+            if (texto.includes('suplemento')) return '🏋️';
+            if (texto.includes('natural')) return '🌿';
+            if (texto.includes('orgánico') || texto.includes('organico')) return '🍃';
+            if (texto.includes('fruta')) return '🍎';
+            if (texto.includes('verdura')) return '🥦';
+            if (texto.includes('lácteo') || texto.includes('lacteo')) return '🥛';
+            if (texto.includes('pescado')) return '🐟';
+            if (texto.includes('huevo')) return '🥚';
+            
+            return '🌿'; // Icono por defecto
+        }
+    </script>
+</body>
+</html>

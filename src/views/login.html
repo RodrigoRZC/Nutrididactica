@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Nutrididactica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="3" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+        }
+
+        .logo {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .header h1 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .header p {
+            opacity: 0.9;
+            position: relative;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .form-container {
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e8f5e8;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8fdf8;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #27ae60;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 20px rgba(149, 165, 166, 0.3);
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 2px solid #f0f7f0;
+        }
+
+        .switch-form a {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #e8f5e8;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+
+        .alert-error {
+            background: #fde8e8;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-home a {
+            color: #7f8c8d;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-home a:hover {
+            color: #27ae60;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🔐</div>
+            <h1>Nutrididactica</h1>
+            <p>Accede a tu cuenta o regístrate</p>
+        </div>
+        
+        <div class="content">
+            <!-- Formulario de Login -->
+            <div id="loginForm" class="form-container">
+                <div id="loginAlert"></div>
+                
+                <div class="form-group">
+                    <label for="loginEmail">Correo Electrónico</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="tu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Contraseña</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Tu contraseña" required>
+                </div>
+                
+                <button class="btn" onclick="login()">Iniciar Sesión</button>
+                
+                <div class="switch-form">
+                    ¿No tienes una cuenta? <a onclick="showRegister()">Regístrate aquí</a>
+                </div>
+            </div>
+
+            <!-- Formulario de Registro -->
+            <div id="registerForm" class="form-container hidden">
+                <div id="registerAlert"></div>
+                
+                <div class="form-group">
+                    <label for="registerName">Nombre Completo</label>
+                    <input type="text" id="registerName" class="form-control" placeholder="Tu nombre completo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">Correo Electrónico</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="tu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPhone">Teléfono (Opcional)</label>
+                    <input type="tel" id="registerPhone" class="form-control" placeholder="+52 123 456 7890">
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Contraseña</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Mínimo 6 caracteres" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirmar Contraseña</label>
+                    <input type="password" id="registerConfirmPassword" class="form-control" placeholder="Repite tu contraseña" required>
+                </div>
+                
+                <button class="btn" onclick="register()">Crear Cuenta</button>
+                
+                <div class="switch-form">
+                    ¿Ya tienes una cuenta? <a onclick="showLogin()">Inicia sesión aquí</a>
+                </div>
+            </div>
+
+            <div class="back-home">
+                <a href="/">← Volver al catálogo</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar formulario de login
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            clearAlerts();
+        }
+
+        // Mostrar formulario de registro
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            clearAlerts();
+        }
+
+        // Limpiar alertas
+        function clearAlerts() {
+            document.getElementById('loginAlert').innerHTML = '';
+            document.getElementById('registerAlert').innerHTML = '';
+        }
+
+        // Función de login
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const alertDiv = document.getElementById('loginAlert');
+
+            if (!email || !password) {
+                alertDiv.innerHTML = '<div class="alert alert-error">Por favor, completa todos los campos</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alertDiv.innerHTML = '<div class="alert alert-success">¡Inicio de sesión exitoso! Redirigiendo...</div>';
+                    // Aquí puedes redirigir al usuario o guardar el token de sesión
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    alertDiv.innerHTML = `<div class="alert alert-error">${data.message}</div>`;
+                }
+            } catch (error) {
+                alertDiv.innerHTML = '<div class="alert alert-error">Error de conexión. Intenta nuevamente.</div>';
+            }
+        }
+
+        // Función de registro
+        async function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            const alertDiv = document.getElementById('registerAlert');
+
+            // Validaciones
+            if (!name || !email || !password) {
+                alertDiv.innerHTML = '<div class="alert alert-error">Nombre, email y contraseña son obligatorios</div>';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alertDiv.innerHTML = '<div class="alert alert-error">Las contraseñas no coinciden</div>';
+                return;
+            }
+
+            if (password.length < 6) {
+                alertDiv.innerHTML = '<div class="alert alert-error">La contraseña debe tener al menos 6 caracteres</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        email, 
+                        name, 
+                        phone: phone || null, 
+                        password 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alertDiv.innerHTML = '<div class="alert alert-success">¡Registro exitoso! Ahora puedes iniciar sesión.</div>';
+                    // Limpiar formulario
+                    document.getElementById('registerName').value = '';
+                    document.getElementById('registerEmail').value = '';
+                    document.getElementById('registerPhone').value = '';
+                    document.getElementById('registerPassword').value = '';
+                    document.getElementById('registerConfirmPassword').value = '';
+                    
+                    // Mostrar formulario de login después de 2 segundos
+                    setTimeout(() => {
+                        showLogin();
+                    }, 2000);
+                } else {
+                    alertDiv.innerHTML = `<div class="alert alert-error">${data.message}</div>`;
+                }
+            } catch (error) {
+                alertDiv.innerHTML = '<div class="alert alert-error">Error de conexión. Intenta nuevamente.</div>';
+            }
+        }
+
+        // Permitir enviar formularios con Enter
+        document.addEventListener('DOMContentLoaded', function() {
+            // Para login
+            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+
+            // Para registro
+            document.getElementById('registerConfirmPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    register();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
