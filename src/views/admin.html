@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Nutrididactica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+       
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 30px 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .leaf-decoration {
+            position: absolute;
+            font-size: 2.5em;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        .leaf-1 { top: 20px; left: 10%; transform: rotate(45deg); }
+        .leaf-2 { top: 60px; right: 15%; transform: rotate(-30deg); }
+        .leaf-3 { bottom: 30px; left: 20%; transform: rotate(60deg); }
+        
+        .admin-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .admin-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .admin-logo {
+            font-size: 2.5em;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+        }
+        
+        .admin-title h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        
+        .admin-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #27ae60;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+        }
+        
+        .admin-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .user-welcome-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border-left: 5px solid #27ae60;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+        }
+        
+        .user-info h2 {
+            font-size: 1.6em;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .user-details {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f7f0;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+        
+        .stat-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .stat-card h3 {
+            color: #7f8c8d;
+            font-size: 1em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .stat-number {
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .stat-trend {
+            font-size: 0.9em;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+        }
+        
+        .trend-up {
+            background: #e8f5e8;
+            color: #27ae60;
+        }
+        
+        .trend-down {
+            background: #fde8e8;
+            color: #e74c3c;
+        }
+        
+        .admin-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #f0f7f0;
+        }
+        
+        .section-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+        
+        .section-icon {
+            font-size: 1.8em;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .section-header h2 {
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+        
+        .section-content {
+            padding: 30px;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+        }
+        
+        .action-btn {
+            background: #f8fdf8;
+            border: 2px solid #e8f5e8;
+            padding: 25px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .action-btn:hover {
+            border-color: #27ae60;
+            background: #e8f5e8;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.15);
+        }
+        
+        .action-icon {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+        
+        .action-text {
+            font-weight: 600;
+            font-size: 1em;
+        }
+        
+        .recent-activity {
+            list-style: none;
+        }
+        
+        .activity-item {
+            padding: 20px 0;
+            border-bottom: 2px solid #f8fdf8;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .activity-item:hover {
+            background: #f8fdf8;
+            margin: 0 -20px;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+        
+        .activity-desc {
+            color: #7f8c8d;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+        
+        .activity-time {
+            color: #bdc3c7;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .admin-footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 40px;
+        }
+        
+        .admin-footer p {
+            opacity: 0.8;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #27ae60;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-nav {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .admin-title {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .admin-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .user-welcome-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .admin-header {
+                padding: 25px 20px;
+            }
+            
+            .admin-title h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="leaf-decoration">🥬</div>
+        <div class="leaf-decoration">🌿</div>
+        <div class="leaf-decoration">🥦</div>
+        
+        <nav class="admin-nav">
+            <div class="admin-title">
+                <div class="admin-logo">⚙️</div>
+                <div>
+                    <h1>Panel de Administración</h1>
+                    <div class="admin-subtitle">Nutrididactica - Gestión Integral</div>
+                </div>
+            </div>
+            <div class="admin-actions">
+                <a href="/" class="btn btn-secondary">
+                    🏠 Ir al Catálogo
+                </a>
+                <a href="/logout" class="btn btn-danger">
+                    🚪 Cerrar Sesión
+                </a>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="admin-container">
+        <!-- Tarjeta de bienvenida -->
+        <div class="user-welcome-card">
+            <div class="user-avatar">👨‍💼</div>
+            <div class="user-info">
+                <h2 id="userWelcome">Cargando información...</h2>
+                <div class="user-details" id="userDetails"></div>
+            </div>
+        </div>
+        
+        <!-- Estadísticas -->
+        <div class="admin-stats">
+            <div class="stat-card">
+                <span class="stat-icon">📦</span>
+                <h3>Total Productos</h3>
+                <div class="stat-number" id="totalProducts">--</div>
+                <span class="stat-trend trend-up" id="productsTrend">+5% este mes</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">🛒</span>
+                <h3>Pedidos Hoy</h3>
+                <div class="stat-number" id="todayOrders">--</div>
+                <span class="stat-trend trend-up" id="ordersTrend">+12% hoy</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">👥</span>
+                <h3>Usuarios Registrados</h3>
+                <div class="stat-number" id="totalUsers">--</div>
+                <span class="stat-trend trend-up" id="usersTrend">+8% este mes</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">💰</span>
+                <h3>Ingresos del Mes</h3>
+                <div class="stat-number" id="monthlyRevenue">$--</div>
+                <span class="stat-trend trend-up" id="revenueTrend">+15% este mes</span>
+            </div>
+        </div>
+        
+        <!-- Secciones principales -->
+        <div class="admin-sections">
+            <!-- Gestión de Productos -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">📦</div>
+                    <h2>Gestión de Productos</h2>
+                </div>
+                <div class="section-content">
+                    <div class="quick-actions">
+                        <a href="#" class="action-btn" onclick="manageProducts()">
+                            <span class="action-icon">➕</span>
+                            <span class="action-text">Agregar Producto</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="viewProducts()">
+                            <span class="action-icon">👁️</span>
+                            <span class="action-text">Ver Productos</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="manageCategories()">
+                            <span class="action-icon">🏷️</span>
+                            <span class="action-text">Categorías</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="updateStock()">
+                            <span class="action-icon">📊</span>
+                            <span class="action-text">Control Stock</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gestión de Pedidos -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">🛒</div>
+                    <h2>Gestión de Pedidos</h2>
+                </div>
+                <div class="section-content">
+                    <div class="quick-actions">
+                        <a href="#" class="action-btn" onclick="viewOrders()">
+                            <span class="action-icon">📋</span>
+                            <span class="action-text">Ver Pedidos</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="pendingOrders()">
+                            <span class="action-icon">⏳</span>
+                            <span class="action-text">Pendientes</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="orderReports()">
+                            <span class="action-icon">📈</span>
+                            <span class="action-text">Reportes</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="shippingManagement()">
+                            <span class="action-icon">🚚</span>
+                            <span class="action-text">Envíos</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gestión de Usuarios -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">👥</div>
+                    <h2>Gestión de Usuarios</h2>
+                </div>
+                <div class="section-content">
+                    <div class="quick-actions">
+                        <a href="#" class="action-btn" onclick="viewUsers()">
+                            <span class="action-icon">👁️</span>
+                            <span class="action-text">Ver Usuarios</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="userStats()">
+                            <span class="action-icon">📊</span>
+                            <span class="action-text">Estadísticas</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="createAdmin()">
+                            <span class="action-icon">⚡</span>
+                            <span class="action-text">Nuevo Admin</span>
+                        </a>
+                        <a href="#" class="action-btn" onclick="userSupport()">
+                            <span class="action-icon">💬</span>
+                            <span class="action-text">Soporte</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actividad Reciente -->
+            <div class="section-card">
+                <div class="section-header">
+                    <div class="section-icon">📈</div>
+                    <h2>Actividad Reciente</h2>
+                </div>
+                <div class="section-content">
+                    <ul class="recent-activity" id="recentActivity">
+                        <li class="activity-item">
+                            <div class="activity-icon">⏳</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Cargando actividad...</div>
+                                <div class="activity-time">Justo ahora</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="admin-footer">
+            <p>🌱 Nutrididactica - Sistema de Administración</p>
+            <p>Gestión Integral de Productos Nutricionales y Suplementos</p>
+        </div>
+    </div>
+
+    <script>
+        // Cargar información del admin al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarInfoAdmin();
+            cargarEstadisticas();
+            cargarActividadReciente();
+        });
+        
+        // Cargar información del usuario admin
+        async function cargarInfoAdmin() {
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('userWelcome').textContent = 
+                        `¡Bienvenido, ${data.user.name}!`;
+                    document.getElementById('userDetails').textContent = 
+                        `Administrador del Sistema | ${data.user.email}`;
+                } else {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Error cargando info admin:', error);
+            }
+        }
+        
+        // Cargar estadísticas
+        async function cargarEstadisticas() {
+            try {
+                const response = await fetch('/api/admin/estadisticas');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('totalProducts').textContent = data.estadisticas.totalProductos;
+                    document.getElementById('todayOrders').textContent = data.estadisticas.pedidosHoy;
+                    document.getElementById('totalUsers').textContent = data.estadisticas.totalUsuarios;
+                    document.getElementById('monthlyRevenue').textContent = `$${data.estadisticas.ingresosMes.toFixed(2)}`;
+                } else {
+                    // Usar valores por defecto si hay error
+                    document.getElementById('totalProducts').textContent = '25';
+                    document.getElementById('todayOrders').textContent = '8';
+                    document.getElementById('totalUsers').textContent = '156';
+                    document.getElementById('monthlyRevenue').textContent = '$2,845.00';
+                }
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+                // Valores por defecto
+                document.getElementById('totalProducts').textContent = '25';
+                document.getElementById('todayOrders').textContent = '8';
+                document.getElementById('totalUsers').textContent = '156';
+                document.getElementById('monthlyRevenue').textContent = '$2,845.00';
+            }
+        }
+        
+        // Cargar actividad reciente
+        async function cargarActividadReciente() {
+            const activityList = document.getElementById('recentActivity');
+            
+            // Simular datos de actividad
+            const actividades = [
+                {
+                    icon: '🔐',
+                    title: 'Inicio de sesión exitoso',
+                    desc: 'Acceso al panel de administración',
+                    time: 'Hace 2 minutos'
+                },
+                {
+                    icon: '📦',
+                    title: 'Nuevo pedido recibido',
+                    desc: 'Pedido #00125 de María González',
+                    time: 'Hace 15 minutos'
+                },
+                {
+                    icon: '👥',
+                    title: 'Nuevo usuario registrado',
+                    desc: 'Carlos Rodríguez se unió a Nutrididactica',
+                    time: 'Hace 1 hora'
+                },
+                {
+                    icon: '💰',
+                    title: 'Pago procesado',
+                    desc: 'Pedido #00124 marcado como completado',
+                    time: 'Hace 2 horas'
+                },
+                {
+                    icon: '📊',
+                    title: 'Stock actualizado',
+                    desc: 'Proteína Vegana - Stock ajustado a 45 unidades',
+                    time: 'Hace 3 horas'
+                }
+            ];
+            
+            let html = '';
+            actividades.forEach(actividad => {
+                html += `
+                    <li class="activity-item">
+                        <div class="activity-icon">${actividad.icon}</div>
+                        <div class="activity-content">
+                            <div class="activity-title">${actividad.title}</div>
+                            <div class="activity-desc">${actividad.desc}</div>
+                            <div class="activity-time">${actividad.time}</div>
+                        </div>
+                    </li>
+                `;
+            });
+            
+            activityList.innerHTML = html;
+        }
+        
+        // Funciones para las acciones
+        function manageProducts() {
+            window.location.href = '/admin/productos/nuevo';
+        }
+        
+        function viewProducts() {
+            window.location.href = '/admin/productos';
+        }
+        
+        function manageCategories() {
+            window.location.href = '/admin/categorias';
+        }
+        
+        function updateStock() {
+            window.location.href = '/admin/stock';
+        }
+        
+        function viewOrders() {
+            alert('🛒 Funcionalidad de visualización de pedidos - Próximamente');
+        }
+        
+        function pendingOrders() {
+            alert('⏳ Funcionalidad de pedidos pendientes - Próximamente');
+        }
+        
+        function orderReports() {
+            alert('📈 Funcionalidad de reportes de pedidos - Próximamente');
+        }
+        
+        function shippingManagement() {
+            alert('🚚 Funcionalidad de gestión de envíos - Próximamente');
+        }
+        
+        function viewUsers() {
+            window.location.href = '/admin/usuarios';
+        }
+        
+        function userStats() {
+            alert('📊 Funcionalidad de estadísticas de usuarios - Próximamente');
+        }
+        
+        function createAdmin() {
+            alert('⚡ Funcionalidad de creación de administradores - Próximamente');
+        }
+        
+        function userSupport() {
+            alert('💬 Funcionalidad de soporte al usuario - Próximamente');
+        }
+        
+        // Actualizar estadísticas cada 30 segundos
+        setInterval(cargarEstadisticas, 30000);
+    </script>
+</body>
+</html>

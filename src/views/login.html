@@ -288,12 +288,10 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const alertDiv = document.getElementById('loginAlert');
-
             if (!email || !password) {
                 alertDiv.innerHTML = '<div class="alert alert-error">Por favor, completa todos los campos</div>';
                 return;
             }
-
             try {
                 const response = await fetch('/api/login', {
                     method: 'POST',
@@ -302,14 +300,17 @@
                     },
                     body: JSON.stringify({ email, password })
                 });
-
                 const data = await response.json();
-
                 if (data.success) {
                     alertDiv.innerHTML = '<div class="alert alert-success">¡Inicio de sesión exitoso! Redirigiendo...</div>';
-                    // Aquí puedes redirigir al usuario o guardar el token de sesión
+                    
+                    // Redirigir según el tipo de usuario
                     setTimeout(() => {
-                        window.location.href = '/';
+                        if (data.isAdmin) {
+                            window.location.href = '/admin';
+                        } else {
+                            window.location.href = '/';
+                        }
                     }, 2000);
                 } else {
                     alertDiv.innerHTML = `<div class="alert alert-error">${data.message}</div>`;

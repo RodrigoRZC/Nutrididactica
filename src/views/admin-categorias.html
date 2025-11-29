@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Categorías - Nutrididactica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+       
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 30px 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        .leaf-decoration {
+            position: absolute;
+            font-size: 2.5em;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        .leaf-1 { top: 20px; left: 10%; transform: rotate(45deg); }
+        .leaf-2 { top: 60px; right: 15%; transform: rotate(-30deg); }
+        .leaf-3 { bottom: 30px; left: 20%; transform: rotate(60deg); }
+        
+        .admin-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .admin-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .admin-logo {
+            font-size: 2.5em;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+        }
+        
+        .admin-title h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+        }
+        
+        .admin-subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: #27ae60;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+        }
+        
+        .admin-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .page-title {
+            font-size: 2em;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .page-icon {
+            font-size: 1.5em;
+        }
+        
+        /* Formulario de nueva categoría */
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border-left: 5px solid #27ae60;
+        }
+        
+        .form-section h3 {
+            font-size: 1.4em;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e8f5e8;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8fdf8;
+            color: #2c3e50;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #27ae60;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+            background: white;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-help {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 8px;
+        }
+        
+        /* Lista de categorías */
+        .categories-section {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-left: 5px solid #3498db;
+        }
+        
+        .categories-section h3 {
+            font-size: 1.4em;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .category-card {
+            background: #f8fdf8;
+            border: 2px solid #e8f5e8;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .category-card:hover {
+            border-color: #27ae60;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.15);
+        }
+        
+        .category-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+        
+        .category-icon {
+            font-size: 2em;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .category-info {
+            flex: 1;
+        }
+        
+        .category-name {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .category-description {
+            color: #7f8c8d;
+            line-height: 1.5;
+        }
+        
+        .category-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9em;
+            border-radius: 8px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+            background: #f8fdf8;
+            border-radius: 15px;
+            border: 2px dashed #e8f5e8;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.6;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .alert-success {
+            background: #e8f5e8;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        
+        .alert-error {
+            background: #fde8e8;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #27ae60;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-nav {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .admin-title {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .category-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .category-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="leaf-decoration">🥬</div>
+        <div class="leaf-decoration">🌿</div>
+        <div class="leaf-decoration">🥦</div>
+        
+        <nav class="admin-nav">
+            <div class="admin-title">
+                <div class="admin-logo">🏷️</div>
+                <div>
+                    <h1>Gestión de Categorías</h1>
+                    <div class="admin-subtitle">Nutrididactica - Organización de Productos</div>
+                </div>
+            </div>
+            <div class="admin-actions">
+                <a href="/admin" class="btn btn-secondary">
+                    ⬅️ Volver al Panel
+                </a>
+                <a href="/" class="btn btn-secondary">
+                    🏠 Ir al Catálogo
+                </a>
+            </div>
+        </nav>
+    </header>
+    
+    <div class="admin-container">
+        <!-- Alertas -->
+        <div id="alertContainer"></div>
+        
+        <!-- Encabezado de página -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <span class="page-icon">📋</span>
+                Gestión de Categorías
+            </h1>
+        </div>
+        
+        <!-- Formulario para nueva categoría -->
+        <div class="form-section">
+            <h3>➕ Agregar Nueva Categoría</h3>
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label for="categoryName">Nombre de la Categoría *</label>
+                    <input 
+                        type="text" 
+                        id="categoryName" 
+                        class="form-control" 
+                        placeholder="Ej: Proteínas, Vitaminas, Suplementos..." 
+                        required
+                        maxlength="255"
+                    >
+                    <div class="form-help">El nombre debe ser único y descriptivo</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="categoryDescription">Descripción *</label>
+                    <textarea 
+                        id="categoryDescription" 
+                        class="form-control" 
+                        placeholder="Describe los productos que pertenecerán a esta categoría..." 
+                        required
+                    ></textarea>
+                    <div class="form-help">Proporciona una descripción clara para los usuarios</div>
+                </div>
+                
+                <button type="submit" class="btn btn-success">
+                    💾 Guardar Categoría
+                </button>
+            </form>
+        </div>
+        
+        <!-- Lista de categorías existentes -->
+        <div class="categories-section">
+            <h3>📂 Categorías Existentes</h3>
+            <div class="categories-grid" id="categoriesList">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Cargando categorías...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cargar categorías al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarCategorias();
+            
+            // Configurar el formulario
+            document.getElementById('categoryForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                crearCategoria();
+            });
+        });
+        
+        // Mostrar alerta
+        function mostrarAlerta(mensaje, tipo = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${tipo}`;
+            alertDiv.textContent = mensaje;
+            alertContainer.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                if (alertContainer.contains(alertDiv)) {
+                    alertContainer.removeChild(alertDiv);
+                }
+            }, 5000);
+        }
+        
+        // Cargar categorías desde la API
+        async function cargarCategorias() {
+            const categoriesList = document.getElementById('categoriesList');
+            
+            try {
+                const response = await fetch('/api/admin/categorias');
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.categorias.length === 0) {
+                        categoriesList.innerHTML = `
+                            <div class="empty-state">
+                                <div class="icon">🏷️</div>
+                                <h3>No hay categorías registradas</h3>
+                                <p>Comienza agregando tu primera categoría usando el formulario superior</p>
+                            </div>
+                        `;
+                    } else {
+                        let html = '';
+                        data.categorias.forEach(categoria => {
+                            html += `
+                                <div class="category-card">
+                                    <div class="category-header">
+                                        <div class="category-icon">📁</div>
+                                        <div class="category-info">
+                                            <div class="category-name">${categoria.name}</div>
+                                            <div class="category-description">${categoria.description}</div>
+                                        </div>
+                                    </div>
+                                    <div class="category-actions">
+                                        <button class="btn btn-danger btn-sm" onclick="eliminarCategoria('${categoria.name}')">
+                                            🗑️ Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        categoriesList.innerHTML = html;
+                    }
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Error cargando categorías:', error);
+                categoriesList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">❌</div>
+                        <h3>Error al cargar categorías</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Crear nueva categoría
+        async function crearCategoria() {
+            const name = document.getElementById('categoryName').value;
+            const description = document.getElementById('categoryDescription').value;
+            const submitBtn = document.querySelector('#categoryForm button[type="submit"]');
+            
+            if (!name || !description) {
+                mostrarAlerta('❌ Por favor, completa todos los campos', 'error');
+                return;
+            }
+            
+            try {
+                // Deshabilitar botón
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ Guardando...';
+                
+                const response = await fetch('/api/admin/categorias', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, description })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    mostrarAlerta('✅ Categoría creada exitosamente');
+                    // Limpiar formulario
+                    document.getElementById('categoryForm').reset();
+                    // Recargar lista
+                    cargarCategorias();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Error creando categoría:', error);
+                mostrarAlerta(`❌ ${error.message}`, 'error');
+            } finally {
+                // Rehabilitar botón
+                submitBtn.disabled = false;
+                submitBtn.textContent = '💾 Guardar Categoría';
+            }
+        }
+        
+        // Eliminar categoría
+        async function eliminarCategoria(nombre) {
+            if (!confirm(`¿Estás seguro de que deseas eliminar la categoría "${nombre}"?`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/admin/categorias/${encodeURIComponent(nombre)}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    mostrarAlerta('✅ Categoría eliminada exitosamente');
+                    cargarCategorias();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Error eliminando categoría:', error);
+                mostrarAlerta(`❌ ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
